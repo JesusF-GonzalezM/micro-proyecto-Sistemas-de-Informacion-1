@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#juego {
+  text-align: center;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+select {
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#cartonContainer {
+  margin-top: 20px;
+  border: 1px solid black;
+  padding: 20px;
+  font-size: 20px;
+}
+  
+#cartonContainer {
+  display: inline-block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px solid black;
+  padding: 10px;
+}
+  
+#cartonContainer table {
+  border-collapse: collapse;
+}
+  
+#cartonContainer td {
+  border: 1px solid #000;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+}
+  
+#cartonContainer td.marcada {
+  background-color: #FFD700; /* Amarillo */
+}

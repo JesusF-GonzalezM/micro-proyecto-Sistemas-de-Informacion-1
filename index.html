@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego De Bingo</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="menuPrincipal" class="center">
+  <h1>Bingo!</h1>
+  <h2>Tabla de Puntuaciones</h2>
+  <table id="tablaPuntuaciones">
+    <!-- Aquí se mostrarán las puntuaciones guardadas en el localStorage -->
+  </table>
+  <form id="inicioForm">
+    <div class="jugador">
+      <label for="jugador1">Nombre del Jugador 1:</label>
+      <input type="text" id="jugador1" required>
+    </div>
+    
+    <div class="jugador">
+      <label for="jugador2">Nombre del Jugador 2:</label>
+      <input type="text" id="jugador2" required>
+    </div>
+    
+    <div class="jugador">
+      <label for="jugador3">Nombre del Jugador 3:</label>
+      <input type="text" id="jugador3" required>
+    </div>
+    
+    <div class="jugador">
+      <label for="jugador4">Nombre del Jugador 4:</label>
+      <input type="text" id="jugador4" required>
+    </div>
+    
+    <label for="tamanoCarton">Tamaño del Cartón:</label>
+    <select id="tamanoCarton">
+      <option value="3">3x3</option>
+      <option value="4">4x4</option>
+      <option value="5">5x5</option>
+    </select>
+    <button type="button" id="iniciarJuego">Iniciar Juego</button>
+  </form>
+</div>
+
+<script>
+document.getElementById('iniciarJuego').addEventListener('click', function() {
+  const jugadores = [];
+  for (let i = 1; i <= 4; i++) {
+    jugadores.push(document.getElementById('jugador' + i).value);
+  }
+  const tamanoCarton = document.getElementById('tamanoCarton').value;
+  localStorage.setItem('jugadores', JSON.stringify(jugadores));
+  localStorage.setItem('tamanoCarton', tamanoCarton);
+  window.location.href = 'bingo.html';
+});
+</script>
+
+</body>
+</html>

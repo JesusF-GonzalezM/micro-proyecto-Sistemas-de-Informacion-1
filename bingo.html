@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bingo Game</title>
+<link rel="stylesheet" href="bingo.css">
+</head>
+<body>
+
+<div id="juego" class="center">
+  <h1>Turno: <span id="turno">0</span></h1>
+  <h2>Jugador Actual: <span id="nombreJugador"></span></h2>
+  <div>
+    <label for="selectCarton">Seleccione el Cartón:</label>
+    <select id="selectCarton"></select>
+  </div>
+  <div id="cartonContainer">
+    <!-- Aquí se mostrará el cartón del jugador actual -->
+  </div>
+  <button id="sacarFicha">Sacar Ficha</button>
+  <p id="fichaSacada"></p>
+</div>
+
+<script src="bingo.js"></script>
+</body>
+</html> 
