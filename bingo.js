@@ -5,14 +5,17 @@ let turnos = 0;
 let gameOver = false;
 let lineas = 0;
 // Puntajes de los 4 jugadores
-let puntajes = new Array(3);
+let puntajes;
 const casillasMarcadas = new Set();
-
 const turno = document.getElementById('turno')
 const cartones = [];
 for (i=0; i<4; i++) {
   cartones.push(generarCarton(n));
 }
+
+document.getElementById('reiniciarJuego').addEventListener('click', function() {
+  window.location.href = 'index.html';
+});
 
 function generarCarton(n) {
   const carton = [];
@@ -38,53 +41,21 @@ function generarCarton(n) {
   return carton;
 }
 
-function revisarLineas(carton) {
+function obtenerPuntuacionCartones(cartones) {
+  const puntuaciones = [];
+
+  for (let i = 0; i < cartones.length; i++) {
+    const carton = cartones[i];
+    const puntuacion = calcularPuntuacionCarton(carton);
+    puntuaciones.push(puntuacion);
+  }
+
+  return puntuaciones;
+}
+
+function revisarCartonLleno(carton) {
   const n = carton.length;
   let cartonLleno = true;
-
-  // Revisar líneas horizontales
-  for (let i = 0; i < n; i++) {
-    let lineaHorizontal = true;
-    for (let j = 0; j < n; j++) {
-      if (carton[i][j] !== 'X') {
-        lineaHorizontal = false;
-        break;
-      }
-    }
-    if (lineaHorizontal) return 1;
-  }
-
-  // Revisar líneas verticales
-  for (let j = 0; j < n; j++) {
-    let lineaVertical = true;
-    for (let i = 0; i < n; i++) {
-      if (carton[i][j] !== 'X') {
-        lineaVertical = false;
-        break;
-      }
-    }
-    if (lineaVertical) return 1;
-  }
-
-  // Revisar diagonal principal
-  let diagonalPrincipal = true;
-  for (let i = 0; i < n; i++) {
-    if (carton[i][i] !== 'X') {
-      diagonalPrincipal = false;
-      break;
-    }
-  }
-  if (diagonalPrincipal) return 2;
-
-  // Revisar diagonal secundaria
-  let diagonalSecundaria = true;
-  for (let i = 0; i < n; i++) {
-    if (carton[i][n - 1 - i] !== 'X') {
-      diagonalSecundaria = false;
-      break;
-    }
-  }
-  if (diagonalSecundaria) return 2;
 
   // Revisar si el cartón está lleno
   for (let i = 0; i < n; i++) {
@@ -98,10 +69,81 @@ function revisarLineas(carton) {
   }
   if (cartonLleno) return 3;
 
-  // Si no se encuentra ninguna línea ni el cartón está lleno, retornar 0
+  // Si no se encuentra el cartón lleno, retorna 0
   return 0;
 }
 
+function obtenerPuntuacionCartones(cartones, casillasMarcadas) {
+  const puntuaciones = [];
+
+  for (let i = 0; i < cartones.length; i++) {
+    const carton = cartones[i];
+    const puntuacion = calcularPuntuacionCarton(carton, casillasMarcadas);
+    puntuaciones.push(puntuacion);
+  }
+
+  return puntuaciones;
+}
+
+function calcularPuntuacionCarton(carton, casillasMarcadas) {
+  const n = carton.length;
+  let puntuacion = 0;
+
+  // Revisar líneas horizontales y verticales
+  for (let i = 0; i < n; i++) {
+    let lineaHorizontalMarcada = true;
+    let lineaVerticalMarcada = true;
+
+    for (let j = 0; j < n; j++) {
+      if (!casillasMarcadas.has(carton[i][j])) {
+        lineaHorizontalMarcada = false;
+      }
+
+      if (!casillasMarcadas.has(carton[j][i])) {
+        lineaVerticalMarcada = false;
+      }
+    }
+
+    if (lineaHorizontalMarcada || lineaVerticalMarcada) {
+      puntuacion += 1;
+    }
+  }
+
+  // Revisar diagonal principal
+  let diagonalPrincipalMarcada = true;
+  for (let i = 0; i < n; i++) {
+    if (!casillasMarcadas.has(carton[i][i])) {
+      diagonalPrincipalMarcada = false;
+      break;
+    }
+  }
+  if (diagonalPrincipalMarcada) puntuacion += 3;
+
+  // Revisar diagonal secundaria
+  let diagonalSecundariaMarcada = true;
+  for (let i = 0; i < n; i++) {
+    if (!casillasMarcadas.has(carton[i][n - 1 - i])) {
+      diagonalSecundariaMarcada = false;
+      break;
+    }
+  }
+  if (diagonalSecundariaMarcada) puntuacion += 3;
+
+  // Revisar si el cartón está todo en amarillo
+  let cartonCompletoMarcado = true;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (!casillasMarcadas.has(carton[i][j])) {
+        cartonCompletoMarcado = false;
+        break;
+      }
+    }
+    if (!cartonCompletoMarcado) break;
+  }
+  if (cartonCompletoMarcado) puntuacion += 5;
+
+  return puntuacion;
+}
 
   document.getElementById('sacarFicha').addEventListener('click', function() {
     // Generar un número aleatorio del 1 al 50
@@ -124,8 +166,8 @@ function revisarLineas(carton) {
           };         
         });
       });
-      lineas = RevisarLineas(carton);
-      if (lineas == 3) {
+      final = revisarCartonLleno(carton);
+      if (final == 3) {
         gameOver = true;
       }
     });
@@ -133,10 +175,13 @@ function revisarLineas(carton) {
     mostrarCarton(cartones[selectCarton.value]);
 
     if (turnos == 25 || gameOver == true) {
+      puntajes = obtenerPuntuacionCartones(cartones, casillasMarcadas);
       juegoTerminado();
     }
 
   });
+
+
 
 // Obtener elementos del DOM
 const selectCarton = document.getElementById('selectCarton');
@@ -173,6 +218,7 @@ function mostrarCarton(carton) {
     fila.forEach(numero => {
       const casilla = document.createElement('td');
       casilla.textContent = numero;
+      casilla.classList.add('casilla');
       if (casillasMarcadas.has(numero)) {
         casilla.style.backgroundColor = 'yellow'; // Aplicar estilo a las casillas marcadas
       }
@@ -190,5 +236,26 @@ function mostrarNombreJugador(nombre) {
 }
 
 function juegoTerminado() {
-  // finalizar el juego y guardar los puntajes
+  localStorage.setItem('puntajes', JSON.stringify(puntajes));
+  
+  // Deshabilitar el botón "Sacar Ficha" durante 10 segundos
+  document.getElementById('sacarFicha').disabled = true;
+
+  const mensaje = document.createElement('p');
+  mensaje.textContent = 'Juego finalizado';
+  mensaje.style.fontSize = '32px';
+  document.getElementById('juego').appendChild(mensaje);
+
+  setTimeout(() => {
+    // Habilitar el botón "Sacar Ficha" después de 10 segundos
+    document.getElementById('sacarFicha').disabled = false;
+
+    // Quitar el mensaje después de 10 segundos
+    document.getElementById('juego').removeChild(mensaje);
+    
+    // Redireccionar a index.html
+    window.location.href = 'index.html';
+  }, 10000);
 }
+
+

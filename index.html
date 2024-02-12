@@ -45,18 +45,6 @@
   </form>
 </div>
 
-<script>
-document.getElementById('iniciarJuego').addEventListener('click', function() {
-  const jugadores = [];
-  for (let i = 1; i <= 4; i++) {
-    jugadores.push(document.getElementById('jugador' + i).value);
-  }
-  const tamanoCarton = document.getElementById('tamanoCarton').value;
-  localStorage.setItem('jugadores', JSON.stringify(jugadores));
-  localStorage.setItem('tamanoCarton', tamanoCarton);
-  window.location.href = 'bingo.html';
-});
-</script>
-
+<script src="index.js"></script>
 </body>
 </html>
